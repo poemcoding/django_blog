@@ -16,19 +16,31 @@ Including another URLconf
 
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.http import HttpResponse
 # 1.导入logging
 import logging
-# 2.获取日志器
-logger = logging.getLogger('django')
-
-def log(request):
-    # 3.使用日志器记录信息
-    logger.info('info')
-    return HttpResponse('test')
+# # 2.获取日志器
+# logger = logging.getLogger('django')
+#
+# def log(request):
+#     # 3.使用日志器记录信息
+#     logger.info('info')
+#     return HttpResponse('test')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', log),
+    # include参数中首先要设置元组 urlconf_module, app_name
+    # urlconf_module 子应用的路由
+    # app_name 子应用的名字
+
+    # namespace 防止不同子应用间名字不同导致的问题
+    path('',include(('users.urls','users'),namespace='users')),
+    # path('', log),
+
+    path('',include(('home.urls','home'),namespace='home')),
 ]
+# 图片访问的路由
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

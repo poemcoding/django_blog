@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 子应用注册
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,7 @@ ROOT_URLCONF = 'blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,9 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -116,6 +118,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '../blog/static'),
+]
 
 # redis配置
 CACHES = {
@@ -166,7 +172,7 @@ LOGGING = {
         'file': {  # 向文件中输出日志
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'D:\\Files\\study\\code\\python\\django_blog\\blog\\logs\\blog.log',  # 日志文件的位置 os.path.join(BASE_DIR, 'blog/logs/blog.log')
+            'filename': os.path.join(BASE_DIR, 'logs/blog.log'),  # 日志文件的位置 os.path.join(BASE_DIR, 'blog/logs/blog.log')
             'maxBytes': 300 * 1024 * 1024,
             'backupCount': 10,
             'formatter': 'verbose'
@@ -180,3 +186,16 @@ LOGGING = {
         },
     }
 }
+
+# 替换系统User来使用自己定义的User
+# 配置信息 为 ’子应用.模型类型'
+AUTH_USER_MODEL = 'users.User'
+
+# 修改系统未登录跳转链接
+LOGIN_URL = '/login/'
+
+# 设置上传的图片 保存到media目录下
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# 设置图片访问的统一路由
+MEDIA_URL = '/media/'
