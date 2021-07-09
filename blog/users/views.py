@@ -430,6 +430,7 @@ class WriteBlogView(LoginRequiredMixin, View):
                 avatar=avatar,
                 category=category,
                 tags=tags,
+                title=title,
                 sumary=sumary,
                 content=content
             )
